@@ -22,29 +22,32 @@ for efficient data storage, providing a seamless user experience.
 ## Getting Started
 
 1. **Clone the Project:**
-    ```bash
-    git clone https://github.com/luan-thnh/hangman-flutter.git
-    cd hangman-flutter
-    ```
+
+   ```bash
+   git clone https://github.com/luan-thnh/hangman.git
+   cd hangman
+   ```
 
 2. **Open the Project:**
-    - Open the project in your preferred Flutter development environment (e.g., VS Code, Android
-      Studio).
+
+   - Open the project in your preferred Flutter development environment (e.g., VS Code, Android
+     Studio).
 
 3. **Fetch Dependencies:**
    Run the following command in the terminal to fetch the project dependencies:
-    ```bash
-    flutter pub get
-    ```
+
+   ```bash
+   flutter pub get
+   ```
 
 4. **Connect a Device or Start an Emulator:**
    Connect a physical device or start an emulator on your machine.
 
 5. **Run the App:**
    Run the app using the following command:
-    ```bash
-    flutter run
-    ```
+   ```bash
+   flutter run
+   ```
 
 Now you have successfully cloned the project and set it up for development. Start playing the
 Hangman game using Flutter!
