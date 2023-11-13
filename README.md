@@ -60,6 +60,10 @@ Hangman game using Flutter!
 
 Sure, here's an example of how you can structure the Screenshots section in your README.md file:
 
+## Download
+
+You can download the latest version of the Hangman game from the [here](https://github.com/luan-thnh/hangman/raw/master/download/hangman-game.apk).
+
 ## Screenshots
 
 ### Splash Screen
