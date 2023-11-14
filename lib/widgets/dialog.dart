@@ -32,9 +32,10 @@ class DialogWidget extends StatelessWidget {
             Text(
               heading!,
               style: const TextStyle(
-                  color: AppColors.bgColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700),
+                color: AppColors.bgColor,
+                fontSize: 24,
+                fontFamily: 'PermanentMarker',
+              ),
             ),
             const SizedBox(
               height: 12,
@@ -45,7 +46,8 @@ class DialogWidget extends StatelessWidget {
               style: const TextStyle(
                   color: AppColors.bgColor,
                   fontSize: 16,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'SpecialElite'),
             ),
             const SizedBox(
               height: 12,
@@ -64,9 +66,16 @@ class DialogWidget extends StatelessWidget {
                   onPressed: () {
                     handleLickBtnNo();
                   },
-                  child: const Text(
-                    'No',
-                    style: TextStyle(fontSize: 18),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      'No',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'SpecialElite',
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -85,9 +94,16 @@ class DialogWidget extends StatelessWidget {
                     handleSetLevel();
                     Navigator.pop(context);
                   },
-                  child: const Text(
-                    'Yes',
-                    style: TextStyle(fontSize: 18),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      'Yes',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'SpecialElite',
+                      ),
+                    ),
                   ),
                 ),
               ],

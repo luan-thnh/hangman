@@ -27,12 +27,17 @@ class _ButtonPrimaryState extends State<ButtonPrimary> {
                 borderRadius: BorderRadius.circular(9999))),
           ),
           onPressed: widget.onPressed,
-          child: Text(
-            widget.text!,
-            style: const TextStyle(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(
+              widget.text!,
+              style: const TextStyle(
                 color: AppColors.bgColor,
                 fontSize: 16,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w600,
+                fontFamily: 'SpecialElite',
+              ),
+            ),
           )),
     );
   }

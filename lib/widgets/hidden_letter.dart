@@ -28,6 +28,7 @@ class HiddenLetter extends StatelessWidget {
             char,
             style: const TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'SpecialElite',
                 color: AppColors.textColor,
                 fontSize: 18),
           )),

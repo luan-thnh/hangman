@@ -21,10 +21,11 @@ class _OptionScreenState extends State<OptionScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: const Text(
-            'Option',
+            'Settings',
             style: TextStyle(
                 color: AppColors.textColor,
                 fontWeight: FontWeight.w600,
+                fontFamily: 'PermanentMarker',
                 letterSpacing: 2),
           ),
         ),
@@ -40,7 +41,8 @@ class _OptionScreenState extends State<OptionScreen> {
                     const Text(
                       'Do you want to restart?',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 22),
+                      style:
+                          TextStyle(fontSize: 22, fontFamily: 'SpecialElite'),
                     ),
                     const SizedBox(
                       height: 16,
@@ -50,7 +52,6 @@ class _OptionScreenState extends State<OptionScreen> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            barrierDismissible: false,
                             builder: (BuildContext context) {
                               return DialogWidget(
                                   heading: 'Restart',
@@ -81,7 +82,8 @@ class _OptionScreenState extends State<OptionScreen> {
               ),
               const Text(
                 'Developed by LuanThnh',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(
+                    color: Colors.white60, fontFamily: 'SpecialElite'),
               )
             ],
           ),

@@ -29,7 +29,6 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   _initializeData() async {
-    // await SharedPref.setGameInfos([]);
     List<GameInfo> gameInfos = await SharedPref.getGameInfos();
     GameInfo playingGame = gameInfos.firstWhere((game) => game.isPlaying);
 
@@ -69,9 +68,17 @@ class _GameScreenState extends State<GameScreen> {
 
     if (index != -1) {
       gameInfos[index] = gameInfo;
+    } else {
+      gameInfos.add(gameInfo);
     }
 
-    if (index >= 0) {
+    gameInfos.forEach((info) => info.isPlaying = false);
+
+    int nextLevelIndex =
+        gameInfos.indexWhere((info) => info.level == level + 1);
+    if (nextLevelIndex != -1) {
+      gameInfos[nextLevelIndex].isPlaying = true;
+    } else {
       gameInfos.add(GameInfo(level: level + 1, rating: 0, isPlaying: true));
     }
 
@@ -98,14 +105,26 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const HomeScreen()),
+                (Route route) => false,
+              ),
+            );
+          },
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'Hangman: The game',
+          'Technology',
           style: TextStyle(
               color: AppColors.textColor,
-              fontWeight: FontWeight.w600,
+              fontFamily: 'PermanentMarker',
               letterSpacing: 2),
         ),
       ),
@@ -127,7 +146,10 @@ class _GameScreenState extends State<GameScreen> {
             )),
             Text(
               'Level ${level}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontFamily: 'SpecialElite',
+              ),
             ),
           ],
         )),
@@ -234,7 +256,7 @@ class _GameScreenState extends State<GameScreen> {
               //   ),
               // ),
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: Wrap(
                   runSpacing: 8,
                   spacing: 8,
@@ -309,10 +331,16 @@ class _GameScreenState extends State<GameScreen> {
                                     );
                                   }
                                 },
-                          child: Text(
-                            characters[index],
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              characters[index],
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'SpecialElite',
+                              ),
+                            ),
                           )),
                     );
                   }),

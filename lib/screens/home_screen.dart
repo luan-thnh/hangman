@@ -55,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       'HANGMAN',
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
                         fontSize: 22.0,
+                        fontFamily: 'PermanentMarker',
                         letterSpacing: 5.0,
                       ),
                     ),
@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text('The Game',
                         style: TextStyle(
+                          fontFamily: 'SpecialElite',
                           letterSpacing: 2.0,
                         ))
                   ],
@@ -102,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const Text(
                   'Developed by LuanThnh',
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(
+                      color: Colors.white60, fontFamily: 'SpecialElite'),
                 )
               ],
             ),

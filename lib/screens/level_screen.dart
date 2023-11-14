@@ -47,7 +47,7 @@ class _LevelScreenState extends State<LevelScreen> {
               'Level Game',
               style: TextStyle(
                   color: AppColors.textColor,
-                  fontWeight: FontWeight.w600,
+                  fontFamily: 'PermanentMarker',
                   letterSpacing: 2),
             ),
           ),
@@ -74,13 +74,14 @@ class _LevelScreenState extends State<LevelScreen> {
 
                         return ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                index < level ? AppColors.bgColor : Colors.grey,
+                            backgroundColor: index < gameInfos.length
+                                ? AppColors.bgColor
+                                : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: index < level
+                          onPressed: index < gameInfos.length
                               ? () async {
                                   List<GameInfo> updatedGameInfos =
                                       gameInfos.map((gameInfo) {
@@ -112,14 +113,18 @@ class _LevelScreenState extends State<LevelScreen> {
                             clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [
-                              Text(
-                                '${index + 1}',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'SpecialElite',
+                                  ),
                                 ),
                               ),
-                              index < level
+                              index < gameInfos.length
                                   ? Positioned(
                                       bottom: -10,
                                       child: Row(
@@ -169,7 +174,8 @@ class _LevelScreenState extends State<LevelScreen> {
                 ),
                 const Text(
                   'Developed by LuanThnh',
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(
+                      color: Colors.white60, fontFamily: 'SpecialElite'),
                 )
               ],
             ),
