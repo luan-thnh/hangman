@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/constants/colors.dart';
 import 'package:hangman/constants/images_url.dart';
+import 'package:hangman/constants/words.dart';
 import 'package:hangman/screens/home_screen.dart';
 import 'package:hangman/utils/generator_word.dart';
 import 'package:hangman/utils/shared_preferences.dart';
@@ -17,6 +18,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   List<String> selectedChar = [];
+  WordKey? wordKey = WordKey.technology;
 
   var tries = 0;
   var level = 1;
@@ -29,20 +31,19 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   _initializeData() async {
-    List<GameInfo> gameInfos = await SharedPref.getGameInfos();
+    wordKey = await SharedPref.getWordKey();
+    List<GameInfo> gameInfos = await SharedPref.getGameInfos(wordKey!);
     GameInfo playingGame = gameInfos.firstWhere((game) => game.isPlaying);
 
-    bool hasSameLevel =
-        gameInfos.any((info) => info.level == playingGame.level);
+    bool hasSameLevel = gameInfos.any((info) => info.level == playingGame.level);
 
     if (!hasSameLevel) {
       gameInfos = [...gameInfos, playingGame];
-      await SharedPref.setGameInfos(gameInfos);
+      await SharedPref.setGameInfos(wordKey!, gameInfos);
     }
 
     setState(() {
-      level =
-          playingGame.toMap()['level'] == 0 ? 1 : playingGame.toMap()['level'];
+      level = playingGame.toMap()['level'] == 0 ? 1 : playingGame.toMap()['level'];
       rating = playingGame.toMap()['rating'];
     });
   }
@@ -60,9 +61,8 @@ class _GameScreenState extends State<GameScreen> {
       }
     });
 
-    GameInfo gameInfo =
-        GameInfo(level: level, rating: rating, isPlaying: false);
-    List<GameInfo> gameInfos = await SharedPref.getGameInfos();
+    GameInfo gameInfo = GameInfo(level: level, rating: rating, isPlaying: false);
+    List<GameInfo> gameInfos = await SharedPref.getGameInfos(wordKey!);
 
     int index = gameInfos.indexWhere((info) => info.level == gameInfo.level);
 
@@ -74,15 +74,14 @@ class _GameScreenState extends State<GameScreen> {
 
     gameInfos.forEach((info) => info.isPlaying = false);
 
-    int nextLevelIndex =
-        gameInfos.indexWhere((info) => info.level == level + 1);
+    int nextLevelIndex = gameInfos.indexWhere((info) => info.level == level + 1);
     if (nextLevelIndex != -1) {
       gameInfos[nextLevelIndex].isPlaying = true;
     } else {
       gameInfos.add(GameInfo(level: level + 1, rating: 0, isPlaying: true));
     }
 
-    await SharedPref.setGameInfos(gameInfos);
+    await SharedPref.setGameInfos(wordKey!, gameInfos);
 
     setState(() {
       tries = 0;
@@ -110,8 +109,7 @@ class _GameScreenState extends State<GameScreen> {
             return IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (BuildContext context) => const HomeScreen()),
+                MaterialPageRoute(builder: (BuildContext context) => const HomeScreen()),
                 (Route route) => false,
               ),
             );
@@ -120,12 +118,9 @@ class _GameScreenState extends State<GameScreen> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Technology',
-          style: TextStyle(
-              color: AppColors.textColor,
-              fontFamily: 'PermanentMarker',
-              letterSpacing: 2),
+        title: Text(
+          wordKey.toString().split('.').last,
+          style: const TextStyle(color: AppColors.textColor, fontFamily: 'PermanentMarker', letterSpacing: 2),
         ),
       ),
       body: Column(children: [
@@ -167,12 +162,9 @@ class _GameScreenState extends State<GameScreen> {
                         alignment: WrapAlignment.center,
                         runSpacing: 8,
                         spacing: 8,
-                        children: generatorWord(level - 1)
+                        children: generatorWord(level - 1, wordKey)
                             .split('')
-                            .map((char) => HiddenLetter(
-                                char: char.toUpperCase(),
-                                visible:
-                                    !selectedChar.contains(char.toUpperCase())))
+                            .map((char) => HiddenLetter(char: char.toUpperCase(), visible: !selectedChar.contains(char.toUpperCase())))
                             .toList(),
                       ),
                     ),
@@ -255,6 +247,9 @@ class _GameScreenState extends State<GameScreen> {
               //         .toList(),
               //   ),
               // ),
+              const SizedBox(
+                height: 12,
+              ),
               Expanded(
                 flex: 4,
                 child: Wrap(
@@ -263,8 +258,8 @@ class _GameScreenState extends State<GameScreen> {
                   alignment: WrapAlignment.center,
                   children: List.generate(characters.length, (index) {
                     return SizedBox(
-                      width: 44,
-                      height: 44,
+                      width: 40,
+                      height: 40,
                       child: TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: AppColors.textColor,
@@ -273,17 +268,12 @@ class _GameScreenState extends State<GameScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: selectedChar
-                                  .contains(characters[index].toUpperCase())
+                          onPressed: selectedChar.contains(characters[index].toUpperCase())
                               ? null
                               : () {
                                   setState(() {
-                                    selectedChar
-                                        .add(characters[index].toUpperCase());
-                                    if (!generatorWord(level - 1)
-                                        .split('')
-                                        .contains(
-                                            characters[index].toLowerCase())) {
+                                    selectedChar.add(characters[index].toUpperCase());
+                                    if (!generatorWord(level - 1, wordKey).split('').contains(characters[index].toLowerCase())) {
                                       tries++;
                                     }
                                   });
@@ -295,33 +285,26 @@ class _GameScreenState extends State<GameScreen> {
                                           builder: (BuildContext context) {
                                             return DialogWidget(
                                                 heading: 'GameOver',
-                                                subHeading:
-                                                    'Do You Want To Play Again?',
-                                                handleSetLevel:
-                                                    handleAgainLevel,
+                                                subHeading: 'Do You Want To Play Again?',
+                                                handleSetLevel: handleAgainLevel,
                                                 handleLickBtnNo: () {
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const HomeScreen()),
+                                                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                                                   );
                                                 });
                                           },
                                         )
                                       : null;
 
-                                  if (generatorWord(level - 1).split('').every(
-                                      (char) => selectedChar
-                                          .contains(char.toUpperCase()))) {
+                                  if (generatorWord(level - 1, wordKey).split('').every((char) => selectedChar.contains(char.toUpperCase()))) {
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return DialogWidget(
                                             heading: 'Level Cleared',
-                                            subHeading:
-                                                'Do You Want To Play Next Level!',
+                                            subHeading: 'Do You Want To Play Next Level!',
                                             handleSetLevel: handleNextLevel,
                                             handleLickBtnNo: () {
                                               handleAgainLevel();

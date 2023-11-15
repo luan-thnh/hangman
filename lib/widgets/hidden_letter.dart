@@ -12,8 +12,8 @@ class HiddenLetter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      width: 50,
-      height: 50,
+      width: 32,
+      height: 32,
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(

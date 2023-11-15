@@ -5,8 +5,16 @@ class ButtonPrimary extends StatefulWidget {
   final Widget? screen;
   final String? text;
   final VoidCallback? onPressed;
+  final double? padding;
+  final double? sizeText;
 
-  ButtonPrimary({super.key, this.text, this.screen, this.onPressed});
+  const ButtonPrimary(
+      {super.key,
+      this.text,
+      this.screen,
+      this.onPressed,
+      this.padding = 16.0,
+      this.sizeText = 16});
 
   @override
   State<ButtonPrimary> createState() => _ButtonPrimaryState();
@@ -19,7 +27,7 @@ class _ButtonPrimaryState extends State<ButtonPrimary> {
       width: double.infinity,
       child: TextButton(
           style: ButtonStyle(
-            padding: MaterialStateProperty.all(const EdgeInsets.all(16.0)),
+            padding: MaterialStateProperty.all(EdgeInsets.all(widget.padding!)),
             backgroundColor: MaterialStateProperty.all(AppColors.textColor),
             // side: MaterialStateProperty.all(
             //     const BorderSide(color: Colors.white, width: 2)),
@@ -31,9 +39,9 @@ class _ButtonPrimaryState extends State<ButtonPrimary> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Text(
               widget.text!,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.bgColor,
-                fontSize: 16,
+                fontSize: widget.sizeText,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'SpecialElite',
               ),

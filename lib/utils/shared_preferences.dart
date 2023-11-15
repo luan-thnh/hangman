@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hangman/constants/words.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameInfo {
@@ -28,17 +29,44 @@ class GameInfo {
 }
 
 class SharedPref {
-  static Future setGameInfos(List<GameInfo> gameInfos) async {
+  static Future<void> setWordKey(WordKey value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('wordKey', value.toString().split('.').last);
+  }
+
+  static Future<WordKey?> getWordKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? keyString = prefs.getString('wordKey');
+
+    if (keyString == null) {
+      return WordKey.technology;
+    }
+
+    return WordKey.values
+        .firstWhere((e) => e.toString().split('.').last == keyString);
+  }
+
+  static Future setGameInfos(WordKey gameType, List<GameInfo> gameInfos) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> gameInfoList =
         gameInfos.map((gameInfo) => jsonEncode(gameInfo.toMap())).toList();
-    await prefs.setStringList('gameInfos', gameInfoList);
+
+    String type = gameType.toString().split('.').last;
+    await prefs.setStringList('game_info_$type', gameInfoList);
   }
 
-  static Future<List<GameInfo>> getGameInfos() async {
+  static Future<List<GameInfo>> getGameInfos(WordKey gameType) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String>? gameInfoList = prefs.getStringList('gameInfos');
-    if (gameInfoList == null)  return [GameInfo(level: 1, rating: 0, isPlaying: true) ];
-    return gameInfoList.map((gameInfo) => GameInfo.fromMap(jsonDecode(gameInfo))).toList();
+
+    String type = gameType.toString().split('.').last;
+    List<String>? gameInfoList = prefs.getStringList('game_info_$type');
+
+    if (gameInfoList == null) {
+      return [GameInfo(level: 1, rating: 0, isPlaying: true)];
+    }
+
+    return gameInfoList
+        .map((gameInfo) => GameInfo.fromMap(jsonDecode(gameInfo)))
+        .toList();
   }
 }

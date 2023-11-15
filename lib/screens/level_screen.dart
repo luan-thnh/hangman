@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/constants/colors.dart';
+import 'package:hangman/constants/words.dart';
 import 'package:hangman/screens/game_screen.dart';
-import 'package:hangman/utils/generator_word.dart';
 import 'package:hangman/utils/shared_preferences.dart';
 import 'package:hangman/widgets/loading_overlay.dart';
 
@@ -17,6 +17,7 @@ class _LevelScreenState extends State<LevelScreen> {
   int rating = 0;
   List<GameInfo> gameInfos = [];
   Future<void>? future;
+  WordKey? wordKey = WordKey.technology;
 
   @override
   void initState() {
@@ -25,7 +26,8 @@ class _LevelScreenState extends State<LevelScreen> {
   }
 
   Future<void> _loadLevelFromSharedPreferences() async {
-    gameInfos = await SharedPref.getGameInfos();
+    wordKey = await SharedPref.getWordKey();
+    gameInfos = await SharedPref.getGameInfos(wordKey!);
     GameInfo playingGame = gameInfos.firstWhere((game) => game.isPlaying);
 
     setState(() {
@@ -61,7 +63,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     crossAxisCount: 5,
                     mainAxisSpacing: 14,
                     crossAxisSpacing: 14,
-                    children: wordsList.asMap().entries.map(
+                    children: wordsList[wordKey]!.asMap().entries.map(
                       (entry) {
                         int index = entry.key;
                         int rating = 0;
@@ -95,7 +97,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                   }).toList();
 
                                   await SharedPref.setGameInfos(
-                                      updatedGameInfos);
+                                      wordKey!, updatedGameInfos);
 
                                   if (!context.mounted) return;
 
